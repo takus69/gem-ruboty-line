@@ -2,26 +2,26 @@ require "rack"
 require 'line/bot'
 require 'rest-client'
 
-module Line
-  module Bot
-    class HTTPClient
-      def post(url, payload, header = {})
-        Ruboty.logger.debug "======= HTTPClient#post ======="
-        Ruboty.logger.debug "payload #{payload}"
-        Ruboty.logger.debug "FIXIT_URL #{ENV["RUBOTY_FIXIE_URL"]}"
-        RestClient.proxy = ENV["RUBOTY_FIXIE_URL"] if ENV["RUBOTY_FIXIE_URL"]
-        RestClient.post(url, payload, header)
-      end
-    end
-  end
-end
+# module Line
+#   module Bot
+#     class HTTPClient
+#       def post(url, payload, header = {})
+#         Ruboty.logger.debug "======= HTTPClient#post ======="
+#         Ruboty.logger.debug "payload #{payload}"
+#         Ruboty.logger.debug "FIXIT_URL #{ENV["RUBOTY_FIXIE_URL"]}"
+#         Request.proxy = ENV["RUBOTY_FIXIE_URL"] if ENV["RUBOTY_FIXIE_URL"]
+#         Request.post(url, payload, header)
+#       end
+#     end
+#   end
+# end
 
 
 module Ruboty module Adapters
 	class LINE < Base
 		env :RUBOTY_LINE_CHANNEL_ID,     "YOUR LINE BOT Channel ID"
 		env :RUBOTY_LINE_CHANNEL_SECRET, "YOUR LINE BOT Channel Secret"
-		env :RUBOTY_LINE_CHANNEL_MID,    "YOUR LINE BOT MID"
+		env :RUBODY_LINE_CHANNEL_TOKEN,  "YOUR LINE BOT Channel Token"
 		env :RUBOTY_LINE_ENDPOINT,       "LINE bot endpoint(Callback URL). (e.g. '/ruboty/line'"
 		def run
 			Ruboty.logger.info "======= LINE#run ======="
@@ -37,9 +37,9 @@ module Ruboty module Adapters
 			Ruboty.logger.info "text : #{text}"
 			Ruboty.logger.debug "to : #{to}"
 
-			client.send_text(
-				to_mid: to,
-				text: text
+			client.push_message(
+				to,
+				text
 			)
 		end
 
@@ -89,9 +89,8 @@ module Ruboty module Adapters
 
 		def client
 			@client ||= ::Line::Bot::Client.new { |config|
-				config.channel_id     = ENV["RUBOTY_LINE_CHANNEL_ID"]
 				config.channel_secret = ENV["RUBOTY_LINE_CHANNEL_SECRET"]
-				config.channel_mid    = ENV["RUBOTY_LINE_CHANNEL_MID"]
+				config.channel_token  = ENV["RUBODY_LINE_CHANNEL_TOKEN"]
  			}
 		end
 	end
