@@ -9,8 +9,8 @@ end
 describe Ruboty::Adapters do
   it 'initilizes ruboty-line' do
     mod = Ruboty::Adapters::LINE.new(1)
-    #mod.run
+    mod.run
     msg = {to: "takus", body: "line test"}
-    mod.say msg
+    #mod.say msg
   end
 end

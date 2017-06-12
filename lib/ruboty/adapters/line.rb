@@ -49,8 +49,7 @@ module Ruboty module Adapters
 				Ruboty.logger.info "======= LINE access ======="
 				Ruboty.logger.debug "env : #{env}"
 
-				events = client.parse_events_from(env)
-				request = ::Line::Bot::Request.new(env)
+				request = Rack::Request.new(env)
 				result = on_post request
 
 				[200, {"Content-Type" => "text/plain"}, [result]]
@@ -63,9 +62,9 @@ module Ruboty module Adapters
 
 			return "OK" unless req.post? && req.fullpath == ENV["RUBOTY_LINE_ENDPOINT"]
 
-			Ruboty.logger.debug "request.body : #{req.data}"
+			Ruboty.logger.debug "request.body : #{req.params['data']}"
 
-			req.data.each { |message|
+			req.params['data'].each { |message|
 				case message.content
 				when ::Line::Bot::Message::Text
 					on_message message
