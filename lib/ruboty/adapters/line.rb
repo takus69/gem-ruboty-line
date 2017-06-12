@@ -2,19 +2,19 @@ require "rack"
 require 'line/bot'
 require 'rest-client'
 
-# module Line
-#   module Bot
-#     class HTTPClient
-#       def post(url, payload, header = {})
-#         Ruboty.logger.debug "======= HTTPClient#post ======="
-#         Ruboty.logger.debug "payload #{payload}"
-#         Ruboty.logger.debug "FIXIT_URL #{ENV["RUBOTY_FIXIE_URL"]}"
-#         Request.proxy = ENV["RUBOTY_FIXIE_URL"] if ENV["RUBOTY_FIXIE_URL"]
-#         Request.post(url, payload, header)
-#       end
-#     end
-#   end
-# end
+module Line
+  module Bot
+    class HTTPClient
+      def post(url, payload, header = {})
+        Ruboty.logger.debug "======= HTTPClient#post ======="
+        Ruboty.logger.debug "payload #{payload}"
+        Ruboty.logger.debug "FIXIT_URL #{ENV["RUBOTY_FIXIE_URL"]}"
+        RestClient.proxy = ENV["RUBOTY_FIXIE_URL"] if ENV["RUBOTY_FIXIE_URL"]
+        RestClient.post(url, payload, header)
+      end
+    end
+  end
+end
 
 
 module Ruboty module Adapters
@@ -37,7 +37,7 @@ module Ruboty module Adapters
 			Ruboty.logger.info "text : #{text}"
 			Ruboty.logger.debug "to : #{to}"
 
-			client.push_message(
+			client.reply_message(
 				to,
 				text
 			)
@@ -49,7 +49,7 @@ module Ruboty module Adapters
 				Ruboty.logger.info "======= LINE access ======="
 				Ruboty.logger.debug "env : #{env}"
 
-				request = ::Line::Bot::Receive::Request.new(env)
+				request = ::Line::Bot::Request.new(env)
 				result = on_post request
 
 				[200, {"Content-Type" => "text/plain"}, [result]]
