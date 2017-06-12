@@ -62,9 +62,9 @@ module Ruboty module Adapters
 
 			return "OK" unless req.post? && req.fullpath == ENV["RUBOTY_LINE_ENDPOINT"]
 
-			Ruboty.logger.debug "request.body : #{req.params['data']}"
+			Ruboty.logger.debug "request.body : #{req.body}"
 
-			req.params['data'].each { |message|
+			req.body.each { |message|
 				case message.content
 				when ::Line::Bot::Message::Text
 					on_message message
