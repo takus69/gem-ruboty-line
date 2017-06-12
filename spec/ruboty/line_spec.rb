@@ -11,6 +11,6 @@ describe Ruboty::Adapters do
     mod = Ruboty::Adapters::LINE.new(1)
     #mod.run
     msg = {to: "takus", body: "line test"}
-    #mod.say msg
+    mod.say msg
   end
 end

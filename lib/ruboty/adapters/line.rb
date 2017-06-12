@@ -49,6 +49,7 @@ module Ruboty module Adapters
 				Ruboty.logger.info "======= LINE access ======="
 				Ruboty.logger.debug "env : #{env}"
 
+				events = client.parse_events_from(env)
 				request = ::Line::Bot::Request.new(env)
 				result = on_post request
 
