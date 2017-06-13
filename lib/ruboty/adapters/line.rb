@@ -2,19 +2,20 @@ require "rack"
 require 'line/bot'
 require 'rest-client'
 
-#module Line
-#  module Bot
-#    class HTTPClient
-#      def post(url, payload, header = {})
-#        Ruboty.logger.debug "======= HTTPClient#post ======="
-#        Ruboty.logger.debug "payload #{payload}"
-#        Ruboty.logger.debug "FIXIT_URL #{ENV["RUBOTY_FIXIE_URL"]}"
-#        RestClient.proxy = ENV["RUBOTY_FIXIE_URL"] if ENV["RUBOTY_FIXIE_URL"]
-#        RestClient.post(url, payload, header)
-#      end
-#    end
-#  end
-#end
+module Line
+  module Bot
+    class HTTPClient
+      def post(url, payload, header = {})
+        Ruboty.logger.debug "======= HTTPClient#post ======="
+        Ruboty.logger.debug "payload #{payload}"
+        Ruboty.logger.debug "FIXIT_URL #{ENV["RUBOTY_FIXIE_URL"]}"
+        Ruboty.logger.debug "URI #{url}"
+        RestClient.proxy = ENV["RUBOTY_FIXIE_URL"] if ENV["RUBOTY_FIXIE_URL"]
+        RestClient.post(url, payload, header)
+      end
+    end
+  end
+end
 
 
 module Ruboty module Adapters
