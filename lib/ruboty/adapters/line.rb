@@ -39,9 +39,14 @@ module Ruboty module Adapters
 			Ruboty.logger.info "text : #{text}"
 			Ruboty.logger.debug "to : #{to}"
 
+			msg = {
+				type: 'text',
+				text: text
+			}
+
 			client.reply_message(
 				to,
-				text
+				msg
 			)
 		end
 
