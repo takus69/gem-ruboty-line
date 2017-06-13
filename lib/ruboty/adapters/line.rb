@@ -62,12 +62,21 @@ module Ruboty module Adapters
 
 			return "OK" unless req.post? && req.fullpath == ENV["RUBOTY_LINE_ENDPOINT"]
 
-			Ruboty.logger.debug "request.body : #{req.body}"
-
-			req.body.each { |message|
-				case message.content
-				when ::Line::Bot::Message::Text
-					on_message message
+			body = req.body.read
+			Ruboty.logger.debug "request.body : #{body}"
+			events = client.parse_events_from(body)
+			events.each { |event|
+				case event
+				when ::Line::Bot::Event::Message
+					case event.type
+					when ::Line::Bot::Event::MessageType::Text
+						Ruboty.logger.debug "text: #{event.message['text']}"
+						message = {
+							text: event.message['text'],
+							to: event['replyToken']
+						}
+						on_message message
+					end
 				end
 			}
 
@@ -76,13 +85,15 @@ module Ruboty module Adapters
 
 		def on_message msg
 			Ruboty.logger.info "======= LINE#on_message ======="
-			Ruboty.logger.debug "content : #{msg.content}"
+			Ruboty.logger.debug "body: #{msg[:text]}"
+			Ruboty.logger.debug "to: #{msg[:to]}"
+			Ruboty.logger.debug "msg: #{msg}"
 
 			Thread.start {
 				robot.receive(
-					body: msg.content[:text],
-					from: msg.from_mid,
-					to:   msg.from_mid,
+					body: msg[:text],
+					from: msg[:to],
+					to:   msg[:to],
 					message: msg)
 			}
 		end
