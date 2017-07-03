@@ -9,8 +9,6 @@ module Line
         Ruboty.logger.debug "======= HTTPClient#post ======="
         Ruboty.logger.debug "payload #{payload}"
         Ruboty.logger.debug "FIXIT_URL #{ENV["RUBOTY_FIXIE_URL"]}"
-        Ruboty.logger.debug "URI #{url}"
-        Ruboty.logger.debug "HEADER#{header}"
         RestClient.proxy = ENV["RUBOTY_FIXIE_URL"] if ENV["RUBOTY_FIXIE_URL"]
         RestClient.post(url, payload, header)
       end
